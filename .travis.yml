@@ -14,6 +14,8 @@ before_script:
   - wget https://github.com/infection/infection/releases/download/0.8.2/infection.phar
   - wget https://github.com/infection/infection/releases/download/0.8.2/infection.phar.pubkey
   - chmod +x infection.phar
+  - touch build/logs/infection-log.txt
+  - cat build/logs/infection-log.txt
 
 script:
   - mkdir -p build/logs
