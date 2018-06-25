@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Stratadox\Deserializer\Condition;
 
-use function is_array;
 use Stratadox\Specification\Contract\Specifies;
 use Stratadox\Specification\Specifying;
 
@@ -27,8 +26,7 @@ final class HaveTheDiscriminatorValue implements Specifies
 
     public function isSatisfiedBy($input): bool
     {
-        return is_array($input)
-            && isset($input[$this->key])
+        return isset($input[$this->key])
             && (string) $input[$this->key] === $this->value;
     }
 }
