@@ -14,14 +14,14 @@ before_script:
   - wget https://github.com/infection/infection/releases/download/0.8.2/infection.phar
   - wget https://github.com/infection/infection/releases/download/0.8.2/infection.phar.pubkey
   - chmod +x infection.phar
-  - touch build/logs/infection-log.txt
-  - cat build/logs/infection-log.txt
 
 script:
   - mkdir -p build/logs
   - vendor/bin/phpunit -c phpunit.xml --testdox
   - vendor/bin/phpstan analyse src tests --level=7
   - ./infection.phar --min-msi=80 --min-covered-msi=100
+  - touch build/logs/infection-log.txt
+  - cat build/logs/infection-log.txt
 
 after_success:
   - travis_retry php vendor/bin/php-coveralls
