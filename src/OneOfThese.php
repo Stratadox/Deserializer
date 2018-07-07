@@ -5,6 +5,13 @@ namespace Stratadox\Deserializer;
 
 use Stratadox\ImmutableCollection\ImmutableCollection;
 
+/**
+ * Uses one of several deserialization options to deserialize the input array
+ * into objects.
+ *
+ * @author Stratadox
+ * @license MIT
+ */
 final class OneOfThese extends ImmutableCollection implements Deserializes
 {
     private function __construct(Option ...$options)
@@ -12,10 +19,18 @@ final class OneOfThese extends ImmutableCollection implements Deserializes
         parent::__construct(...$options);
     }
 
+    /**
+     * Makes a new collection of deserialization options.
+     *
+     * @param Option ...$options The options to consider when deserializing an
+     *                           input array.
+     * @return Deserializes      The deserialization options container.
+     */
     public static function deserializers(Option ...$options): Deserializes
     {
         return new OneOfThese(...$options);
     }
+
 
     /** @inheritdoc */
     public function current(): Option
@@ -34,6 +49,7 @@ final class OneOfThese extends ImmutableCollection implements Deserializes
     {
         return $this->wouldProduceFor($input, $this->optionFor($input));
     }
+
 
     /** @throws CannotDeserialize */
     private function makeFrom(array $input, Option $deserialize)

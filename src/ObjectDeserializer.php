@@ -12,6 +12,12 @@ use Stratadox\Instantiator\CannotInstantiateThis;
 use Stratadox\Instantiator\Instantiator;
 use Stratadox\Instantiator\ProvidesInstances;
 
+/**
+ * Deserializes the input array into objects.
+ *
+ * @author Stratadox
+ * @license MIT
+ */
 final class ObjectDeserializer implements DeserializesObjects
 {
     private $make;

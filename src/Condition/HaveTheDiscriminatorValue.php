@@ -6,6 +6,12 @@ namespace Stratadox\Deserializer\Condition;
 use Stratadox\Specification\Contract\Specifies;
 use Stratadox\Specification\Specifying;
 
+/**
+ * Condition that accepts data with a specific discriminator key and value.
+ *
+ * @author Stratadox
+ * @license MIT
+ */
 final class HaveTheDiscriminatorValue implements Specifies
 {
     use Specifying;
@@ -19,11 +25,19 @@ final class HaveTheDiscriminatorValue implements Specifies
         $this->value = $value;
     }
 
+    /**
+     * Produces a condition that checks a discriminator key/value combination.
+     *
+     * @param string $key   The discriminator key, for instance a column name.
+     * @param string $value The discriminator value to be triggered by.
+     * @return Specifies    The discriminating condition.
+     */
     public static function of(string $key, string $value): Specifies
     {
         return new self($key, $value);
     }
 
+    /** @inheritdoc */
     public function isSatisfiedBy($input): bool
     {
         return isset($input[$this->key])

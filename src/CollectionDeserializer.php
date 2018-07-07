@@ -13,9 +13,10 @@ use Stratadox\Instantiator\Instantiator;
 use Stratadox\Instantiator\ProvidesInstances;
 
 /**
- * Collection object deserializer.
+ * Deserializes the input array into collection objects.
  *
  * @author Stratadox
+ * @license MIT
  */
 final class CollectionDeserializer implements DeserializesCollections
 {
