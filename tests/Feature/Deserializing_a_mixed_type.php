@@ -4,9 +4,11 @@ declare(strict_types=1);
 namespace Stratadox\Deserializer\Test\Feature;
 
 use PHPUnit\Framework\TestCase;
+use Stratadox\Deserializer\ArrayDeserializer;
 use Stratadox\Deserializer\CollectionDeserializer;
 use Stratadox\Deserializer\Condition\AreOfType;
 use Stratadox\Deserializer\Condition\ConsistOfItems;
+use Stratadox\Deserializer\Condition\DidNotGetAccepted;
 use Stratadox\Deserializer\Deserializes;
 use Stratadox\Deserializer\Test\Feature\Fixture\ListOfIntegers;
 use Stratadox\Deserializer\Condition\HaveTheDiscriminatorValue;
@@ -48,6 +50,11 @@ class Deserializing_a_mixed_type extends TestCase
             ForDataSets::that(
                 AreOfList::type()->and(ConsistOfItems::that(AreOfType::string())),
                 CollectionDeserializer::forThe(ListOfStrings::class)
+            ),
+
+            ForDataSets::that(
+                DidNotGetAccepted::yet(),
+                ArrayDeserializer::make()
             )
 
         );
@@ -98,6 +105,18 @@ class Deserializing_a_mixed_type extends TestCase
                 ],
                 new ListOfIntegers(1, 2, 3),
             ],
+            'List of mixed values' => [
+                [
+                    1,
+                    '2',
+                    3.0,
+                ],
+                [
+                    1,
+                    '2',
+                    3.0,
+                ],
+            ]
         ];
     }
 }
