@@ -1,5 +1,18 @@
 # Deserializer
 
+[![Build Status](https://travis-ci.org/Stratadox/Deserializer.svg?branch=master)](https://travis-ci.org/Stratadox/Deserializer)
+[![Coverage Status](https://coveralls.io/repos/github/Stratadox/Deserializer/badge.svg?branch=master)](https://coveralls.io/github/Stratadox/Deserializer?branch=master)
+[![Infection Minimum](https://img.shields.io/badge/msi-100-brightgreen.svg)](https://travis-ci.org/Stratadox/Deserializer)
+[![PhpStan Level](https://img.shields.io/badge/phpstan-7-brightgreen.svg)](https://travis-ci.org/Stratadox/Deserializer)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Stratadox/Deserializer/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Stratadox/Deserializer/?branch=master)
+[![Maintainability](https://api.codeclimate.com/v1/badges/37b211fe31792a114140/maintainability)](https://codeclimate.com/github/Stratadox/Deserializer/maintainability)
+[![Latest Stable Version](https://poser.pugx.org/stratadox/deserializer/v/stable)](https://packagist.org/packages/stratadox/deserializer)
+[![License](https://poser.pugx.org/stratadox/deserializer/license)](https://packagist.org/packages/stratadox/deserializer)
+
+[![Implements](https://img.shields.io/badge/inferfaces-github-blue.svg)](https://github.com/Stratadox/DeserializerContracts)
+[![Latest Stable Version](https://poser.pugx.org/stratadox/deserializer-contracts/v/stable)](https://packagist.org/packages/stratadox/deserializer-contracts)
+[![License](https://poser.pugx.org/stratadox/deserializer-contracts/license)](https://packagist.org/packages/stratadox/deserializer-contracts)
+
 Transforms serialized data into objects.
 
 ## Installation
