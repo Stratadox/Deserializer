@@ -34,7 +34,7 @@ class ObjectDeserializer_produces_objects extends TestCase
         $object = $deserializer->from($properties);
 
         foreach ($properties as $name => $expectedValue) {
-            $this->assertAttributeSame($expectedValue, $name, $object);
+            $this->assertSame($expectedValue, $object->$name);
         }
     }
 
@@ -43,9 +43,10 @@ class ObjectDeserializer_produces_objects extends TestCase
     {
         $deserializer = ObjectDeserializer::forThe(ChildWithoutPropertyAccess::class);
 
+        /** @var ChildWithoutPropertyAccess $object */
         $object = $deserializer->from(['property' => 'The expected value.']);
 
-        $this->assertAttributeSame('The expected value.', 'property', $object);
+        $this->assertSame('The expected value.', $object->property());
     }
 
     /**
