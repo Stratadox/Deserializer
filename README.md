@@ -26,8 +26,8 @@ can convert `serialized` data into objects.
 
 The `serialized` input data is expected to have the form of an array, either 
 numeric or associative.
-This way, one can easily convert both the results of sql queries and decoded json,
-as well as session data and other sources.
+This way, one can easily convert both the results of sql queries and decoded 
+json, as well as session data and other sources.
 
 ## How to use this?
 
@@ -47,7 +47,8 @@ assert('Bar.' === $foo->bar);
 assert('BAZ!' === $foo->getBaz());
 ```
 
-For writing the contents of a numeric array into a collection object, use:
+For writing the contents of a numerically indexed array into a collection object, 
+use:
 ```php
 <?php
 use Stratadox\Deserializer\CollectionDeserializer;
