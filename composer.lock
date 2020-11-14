@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bb33b7da57ab63feb11e6b1c6a4c2ef3",
+    "content-hash": "845e327e1fb3770d76256d7120edb302",
     "packages": [
         {
             "name": "stratadox/collection-contracts",
@@ -93,16 +93,16 @@
         },
         {
             "name": "stratadox/hydration-mapping-contracts",
-            "version": "v0.3",
+            "version": "v0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Stratadox/HydrationMappingContracts.git",
-                "reference": "f8445ca3102694c819f31e0992208696b24077a8"
+                "reference": "6693b655d635507d54c0f4f040e1a6cf663bc296"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Stratadox/HydrationMappingContracts/zipball/f8445ca3102694c819f31e0992208696b24077a8",
-                "reference": "f8445ca3102694c819f31e0992208696b24077a8",
+                "url": "https://api.github.com/repos/Stratadox/HydrationMappingContracts/zipball/6693b655d635507d54c0f4f040e1a6cf663bc296",
+                "reference": "6693b655d635507d54c0f4f040e1a6cf663bc296",
                 "shasum": ""
             },
             "require": {
@@ -126,28 +126,28 @@
             ],
             "support": {
                 "issues": "https://github.com/Stratadox/HydrationMappingContracts/issues",
-                "source": "https://github.com/Stratadox/HydrationMappingContracts/tree/v0.3"
+                "source": "https://github.com/Stratadox/HydrationMappingContracts/tree/v0.4"
             },
-            "time": "2020-11-12T19:03:35+00:00"
+            "time": "2020-11-14T11:31:18+00:00"
         },
         {
             "name": "stratadox/hydrator",
-            "version": "v5",
+            "version": "v6.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Stratadox/Hydrator.git",
-                "reference": "f2b26cd3e26d63bab6e8c9a2dcdfdb861c18297b"
+                "reference": "8f94cb92f8914b416835bc8b629e87ee124a3c16"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Stratadox/Hydrator/zipball/f2b26cd3e26d63bab6e8c9a2dcdfdb861c18297b",
-                "reference": "f2b26cd3e26d63bab6e8c9a2dcdfdb861c18297b",
+                "url": "https://api.github.com/repos/Stratadox/Hydrator/zipball/8f94cb92f8914b416835bc8b629e87ee124a3c16",
+                "reference": "8f94cb92f8914b416835bc8b629e87ee124a3c16",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.2",
-                "stratadox/hydration-mapping-contracts": "^0.3",
-                "stratadox/hydrator-contracts": "^0.7",
+                "stratadox/hydration-mapping-contracts": "^0.4",
+                "stratadox/hydrator-contracts": "^0.8",
                 "stratadox/instantiator": "^0.2"
             },
             "require-dev": {
@@ -177,22 +177,22 @@
             ],
             "support": {
                 "issues": "https://github.com/Stratadox/Hydrator/issues",
-                "source": "https://github.com/Stratadox/Hydrator/tree/v5"
+                "source": "https://github.com/Stratadox/Hydrator/tree/v6.0.1"
             },
-            "time": "2020-11-13T20:36:34+00:00"
+            "time": "2020-11-14T11:33:57+00:00"
         },
         {
             "name": "stratadox/hydrator-contracts",
-            "version": "v0.7",
+            "version": "v0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Stratadox/HydratorContracts.git",
-                "reference": "c783e68bf72e346e6f14ee5eddbcf31dd7617a9a"
+                "reference": "f8b49484953446503cfdc6fc7d5999eea0f7e83d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Stratadox/HydratorContracts/zipball/c783e68bf72e346e6f14ee5eddbcf31dd7617a9a",
-                "reference": "c783e68bf72e346e6f14ee5eddbcf31dd7617a9a",
+                "url": "https://api.github.com/repos/Stratadox/HydratorContracts/zipball/f8b49484953446503cfdc6fc7d5999eea0f7e83d",
+                "reference": "f8b49484953446503cfdc6fc7d5999eea0f7e83d",
                 "shasum": ""
             },
             "require": {
@@ -219,9 +219,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Stratadox/HydratorContracts/issues",
-                "source": "https://github.com/Stratadox/HydratorContracts/tree/v0.7"
+                "source": "https://github.com/Stratadox/HydratorContracts/tree/v0.8"
             },
-            "time": "2020-11-12T11:30:16+00:00"
+            "time": "2020-11-14T08:57:00+00:00"
         },
         {
             "name": "stratadox/immutable-collection",
@@ -1288,16 +1288,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.12.54",
+            "version": "0.12.55",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "45c7b999a4b7dd9ac5558bdaaf23dcebbef88223"
+                "reference": "4382b2b2059ec7e5135d07685ec1e3e16ae32d16"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/45c7b999a4b7dd9ac5558bdaaf23dcebbef88223",
-                "reference": "45c7b999a4b7dd9ac5558bdaaf23dcebbef88223",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/4382b2b2059ec7e5135d07685ec1e3e16ae32d16",
+                "reference": "4382b2b2059ec7e5135d07685ec1e3e16ae32d16",
                 "shasum": ""
             },
             "require": {
@@ -1328,7 +1328,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/0.12.54"
+                "source": "https://github.com/phpstan/phpstan/tree/0.12.55"
             },
             "funding": [
                 {
@@ -1344,7 +1344,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-11-05T13:36:26+00:00"
+            "time": "2020-11-14T10:20:35+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
