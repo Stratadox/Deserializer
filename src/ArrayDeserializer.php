@@ -22,7 +22,7 @@ final class ArrayDeserializer implements Deserializer
     }
 
     /** @inheritdoc */
-    public function from(array $input): iterable
+    public function from(array $input): array
     {
         return $input;
     }
