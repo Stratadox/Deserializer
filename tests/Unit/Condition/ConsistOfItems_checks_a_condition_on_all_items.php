@@ -9,9 +9,6 @@ use PHPUnit\Framework\TestCase;
 use Stratadox\Deserializer\Condition\ConsistOfItems;
 use Stratadox\Deserializer\Test\Unit\Condition\Fixture\Greater;
 
-/**
- * @covers \Stratadox\Deserializer\Condition\ConsistOfItems
- */
 class ConsistOfItems_checks_a_condition_on_all_items extends TestCase
 {
     /**
@@ -20,7 +17,7 @@ class ConsistOfItems_checks_a_condition_on_all_items extends TestCase
      */
     function accepting_a_list_of_numbers_greater_than_zero(array $numbers)
     {
-        $this->assertTrue(
+        self::assertTrue(
             ConsistOfItems::that(Greater::than(0))->isSatisfiedBy($numbers)
         );
     }
@@ -31,7 +28,7 @@ class ConsistOfItems_checks_a_condition_on_all_items extends TestCase
      */
     function denying_a_list_of_numbers_when_not_all_are_positive(array $numbers)
     {
-        $this->assertFalse(
+        self::assertFalse(
             ConsistOfItems::that(Greater::than(0))->isSatisfiedBy($numbers)
         );
     }
@@ -42,7 +39,7 @@ class ConsistOfItems_checks_a_condition_on_all_items extends TestCase
      */
     function denying_all_non_iterable_input($input)
     {
-        $this->assertFalse(
+        self::assertFalse(
             ConsistOfItems::that(Greater::than(0))->isSatisfiedBy($input)
         );
     }

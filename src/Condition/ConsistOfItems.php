@@ -11,13 +11,16 @@ use Stratadox\Specification\Specifying;
 /**
  * Condition that accepts data where all items satisfy a condition.
  *
+ * Used to check that all elements in the input array satisfy a particular
+ * condition.
+ *
  * @author Stratadox
- * @license MIT
  */
 final class ConsistOfItems implements Specifies
 {
     use Specifying;
 
+    /** @var Satisfiable */
     private $condition;
 
     private function __construct(Satisfiable $condition)
@@ -35,7 +38,7 @@ final class ConsistOfItems implements Specifies
      */
     public static function that(Satisfiable $passingTheCondition): Specifies
     {
-        return new ConsistOfItems($passingTheCondition);
+        return new self($passingTheCondition);
     }
 
     /** @inheritdoc */

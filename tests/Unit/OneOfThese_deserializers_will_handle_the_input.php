@@ -3,20 +3,16 @@ declare(strict_types=1);
 
 namespace Stratadox\Deserializer\Test\Unit;
 
+use Stratadox\Deserializer\DeserializationFailure;
+use Stratadox\Deserializer\DeserializationOption;
 use function array_combine;
 use Faker\Factory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use function shuffle;
-use Stratadox\Deserializer\CannotDeserialize;
 use Stratadox\Deserializer\OneOfThese;
-use Stratadox\Deserializer\Option;
 use Stratadox\Deserializer\Test\Unit\Fixture\Popo;
 
-/**
- * @covers \Stratadox\Deserializer\OneOfThese
- * @covers \Stratadox\Deserializer\UnacceptableInput
- */
 class OneOfThese_deserializers_will_handle_the_input extends TestCase
 {
     /**
@@ -28,7 +24,7 @@ class OneOfThese_deserializers_will_handle_the_input extends TestCase
         array $deserializationChoices,
         $expectedResult
     ) {
-        $this->assertEquals(
+        self::assertEquals(
             $expectedResult,
             OneOfThese::deserializers(
                 ...$deserializationChoices
@@ -45,7 +41,7 @@ class OneOfThese_deserializers_will_handle_the_input extends TestCase
         array $deserializationChoices,
         string $expectedType
     ) {
-        $this->assertSame(
+        self::assertSame(
             $expectedType,
             OneOfThese::deserializers(
                 ...$deserializationChoices
@@ -61,7 +57,7 @@ class OneOfThese_deserializers_will_handle_the_input extends TestCase
             $this->unexpectedChoice()
         );
 
-        $this->expectException(CannotDeserialize::class);
+        $this->expectException(DeserializationFailure::class);
         $this->expectExceptionMessage(
             'None of the deserializers are configured to accept `{"foo":"bar"}`'
         );
@@ -77,7 +73,7 @@ class OneOfThese_deserializers_will_handle_the_input extends TestCase
             $this->unexpectedChoice()
         );
 
-        $this->expectException(CannotDeserialize::class);
+        $this->expectException(DeserializationFailure::class);
         $this->expectExceptionMessage(
             'None of the deserializers are configured to accept `{"foo":"bar"}`.'
         );
@@ -127,27 +123,25 @@ class OneOfThese_deserializers_will_handle_the_input extends TestCase
         ];
     }
 
-    private function expectedChoice(string $expectation, $output): Option
+    private function expectedChoice(string $expectation, $output): DeserializationOption
     {
-        /** @var Option|MockObject $option */
-        $option = $this->createMock(Option::class);
-        $option->expects($this->once())
+        /** @var DeserializationOption|MockObject $option */
+        $option = $this->createMock(DeserializationOption::class);
+        $option->expects(self::once())
             ->method('isSatisfiedBy')
             ->willReturn(true);
         $option
-            ->expects($this->once())
+            ->expects(self::once())
             ->method($expectation)
             ->willReturn($output);
         return $option;
     }
 
-    private function unexpectedChoice(): Option
+    private function unexpectedChoice(): DeserializationOption
     {
-        /** @var Option|MockObject $option */
-        $option = $this->createMock(Option::class);
-        $option->expects($this->any())
-            ->method('isSatisfiedBy')
-            ->willReturn(false);
+        /** @var DeserializationOption|MockObject $option */
+        $option = $this->createMock(DeserializationOption::class);
+        $option->method('isSatisfiedBy')->willReturn(false);
         return $option;
     }
 }

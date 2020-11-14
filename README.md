@@ -53,10 +53,24 @@ use:
 <?php
 use Stratadox\Deserializer\CollectionDeserializer;
 
-$deserialize = CollectionDeserializer::forThe(Numbers::class);
+$deserialize = CollectionDeserializer::forImmutable(Numbers::class);
 $numbers = $deserialize->from([10, 11, 12]);
 
 assert($numbers instanceof Numbers);
+assert(count($numbers) === 3);
+assert($numbers[0] === 10);
+assert($numbers[1] === 11);
+assert($numbers[2] === 12);
+```
+Or
+```php
+<?php
+use Stratadox\Deserializer\CollectionDeserializer;
+
+$deserialize = CollectionDeserializer::forMutable(ArrayObject::class);
+$numbers = $deserialize->from([10, 11, 12]);
+
+assert($numbers instanceof ArrayObject);
 assert(count($numbers) === 3);
 assert($numbers[0] === 10);
 assert($numbers[1] === 11);
@@ -132,3 +146,7 @@ $b = $deserialize->from([
 assert($a instanceof ChildA);
 assert($b instanceof ChildB);
 ```
+
+These features can be combined into more advanced deserialization structures, 
+such as conditionally applied deserializers that are configured with [mapped 
+hydrators](https://github.com/Stratadox/HydrationMapping).

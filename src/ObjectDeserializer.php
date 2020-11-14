@@ -3,27 +3,28 @@ declare(strict_types=1);
 
 namespace Stratadox\Deserializer;
 
-use function class_parents as listOfParentsForThe;
-use Stratadox\Hydrator\CannotHydrate;
-use Stratadox\Hydrator\Hydrates;
+use Stratadox\Hydrator\HydrationFailure;
+use Stratadox\Hydrator\Hydrator;
+use Stratadox\Instantiator\InstantiationFailure;
+use Stratadox\Instantiator\ObjectInstantiator;
 use Stratadox\Hydrator\ObjectHydrator;
 use Stratadox\Hydrator\ReflectiveHydrator;
-use Stratadox\Instantiator\CannotInstantiateThis;
 use Stratadox\Instantiator\Instantiator;
-use Stratadox\Instantiator\ProvidesInstances;
+use function class_parents;
 
 /**
  * Deserializes the input array into objects.
  *
  * @author Stratadox
- * @license MIT
  */
-final class ObjectDeserializer implements DeserializesObjects
+final class ObjectDeserializer implements Deserializer
 {
+    /** @var Instantiator */
     private $make;
+    /** @var Hydrator */
     private $hydrator;
 
-    private function __construct(ProvidesInstances $instance, Hydrates $hydrate)
+    private function __construct(Instantiator $instance, Hydrator $hydrate)
     {
         $this->make = $instance;
         $this->hydrator = $hydrate;
@@ -37,15 +38,15 @@ final class ObjectDeserializer implements DeserializesObjects
      * always be necessary. (ie. when not inheriting private properties) In such
      * cases, @see ObjectDeserializer::using can be used instead.
      *
-     * @param string $class            The fully qualified collection class name.
-     * @return DeserializesObjects     The object deserializer.
-     * @throws CannotInstantiateThis   When the class cannot be instantiated.
+     * @param string $class         The fully qualified collection class name.
+     * @return Deserializer         The object deserializer.
+     * @throws InstantiationFailure When the class cannot be instantiated.
      */
-    public static function forThe(string $class): DeserializesObjects
+    public static function forThe(string $class): Deserializer
     {
         return new ObjectDeserializer(
-            Instantiator::forThe($class),
-            empty(listOfParentsForThe($class))
+            ObjectInstantiator::forThe($class),
+            empty(class_parents($class))
                 ? ObjectHydrator::default()
                 : ReflectiveHydrator::default()
         );
@@ -55,14 +56,14 @@ final class ObjectDeserializer implements DeserializesObjects
      * Makes a new deserializer for the class, using custom instantiator and
      * hydrator.
      *
-     * @param ProvidesInstances $instantiator The object that produces instances.
-     * @param Hydrates          $hydrator     The object that writes properties.
-     * @return DeserializesObjects            The object deserializer.
+     * @param Instantiator $instantiator The object that produces instances.
+     * @param Hydrator     $hydrator     The object that writes properties.
+     * @return Deserializer              The object deserializer.
      */
     public static function using(
-        ProvidesInstances $instantiator,
-        Hydrates $hydrator
-    ): DeserializesObjects {
+        Instantiator $instantiator,
+        Hydrator $hydrator
+    ): Deserializer {
         return new ObjectDeserializer($instantiator, $hydrator);
     }
 
@@ -72,7 +73,7 @@ final class ObjectDeserializer implements DeserializesObjects
         $object = $this->make->instance();
         try {
             $this->hydrator->writeTo($object, $input);
-        } catch (CannotHydrate $exception) {
+        } catch (HydrationFailure $exception) {
             throw FailedToDeserializeTheObject::encountered($exception);
         }
         return $object;

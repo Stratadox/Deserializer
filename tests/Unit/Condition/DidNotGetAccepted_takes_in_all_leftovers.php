@@ -19,7 +19,7 @@ class DidNotGetAccepted_takes_in_all_leftovers extends TestCase
      */
     function accepting_all_input($input)
     {
-        $this->assertTrue(DidNotGetAccepted::yet()->isSatisfiedBy($input));
+        self::assertTrue(DidNotGetAccepted::yet()->isSatisfiedBy($input));
     }
 
     public function randomData(): array

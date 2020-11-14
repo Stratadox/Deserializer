@@ -3,27 +3,22 @@ declare(strict_types=1);
 
 namespace Stratadox\Deserializer\Test\Unit;
 
-use function count;
+use ArrayObject;
 use Faker\Factory as RandomGenerator;
 use Faker\Generator;
-use function implode;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use function sprintf;
-use Stratadox\Deserializer\CannotDeserialize;
 use Stratadox\Deserializer\CollectionDeserializer;
+use Stratadox\Deserializer\DeserializationFailure;
 use Stratadox\Deserializer\Test\Unit\Fixture\CollectionOfIntegers;
 use Stratadox\Deserializer\Test\Unit\Fixture\InconstructibleCollection;
 use Stratadox\Deserializer\Test\Unit\Fixture\Popo;
-use Stratadox\Hydrator\Hydrates;
-use Stratadox\Instantiator\ProvidesInstances;
+use Stratadox\Hydrator\Hydrator;
+use Stratadox\Instantiator\Instantiator;
+use function count;
+use function implode;
+use function sprintf;
 
-/**
- * @covers \Stratadox\Deserializer\CollectionDeserializer
- * @covers \Stratadox\Deserializer\FailedToDeserializeTheCollection
- * @covers \Stratadox\Deserializer\IllegalInputKey
- * @covers \Stratadox\Deserializer\NonIterableCollection
- */
 class CollectionDeserializer_produces_collection_objects extends TestCase
 {
     private const TESTS = 10;
@@ -32,18 +27,36 @@ class CollectionDeserializer_produces_collection_objects extends TestCase
      * @test
      * @dataProvider integers
      */
-    function producing_collections(
+    function producing_immutable_collections(
         array $integers,
         CollectionOfIntegers $expectedCollection,
         CollectionOfIntegers $unexpectedCollection
     ) {
         /** @var CollectionOfIntegers $actualCollection */
-        $actualCollection = CollectionDeserializer::forThe(
+        $actualCollection = CollectionDeserializer::forImmutable(
             CollectionOfIntegers::class
         )->from($integers);
 
-        $this->assertTrue($expectedCollection->equals($actualCollection));
-        $this->assertFalse($unexpectedCollection->equals($actualCollection));
+        self::assertTrue($expectedCollection->equals($actualCollection));
+        self::assertFalse($unexpectedCollection->equals($actualCollection));
+    }
+
+    /**
+     * @test
+     * @dataProvider strings
+     */
+    function producing_mutable_collections(
+        array $strings,
+        ArrayObject $expectedCollection,
+        ArrayObject $unexpectedCollection
+    ) {
+        /** @var ArrayObject $actualCollection */
+        $actualCollection = CollectionDeserializer::forMutable(
+            ArrayObject::class
+        )->from($strings);
+
+        self::assertEquals($expectedCollection, $actualCollection);
+        self::assertNotEquals($unexpectedCollection, $actualCollection);
     }
 
     /**
@@ -52,9 +65,9 @@ class CollectionDeserializer_produces_collection_objects extends TestCase
      */
     function retrieving_the_class_name(string $class)
     {
-        $this->assertSame(
+        self::assertSame(
             $class,
-            CollectionDeserializer::forThe($class)->typeFor([])
+            CollectionDeserializer::forImmutable($class)->typeFor([])
         );
     }
 
@@ -63,17 +76,17 @@ class CollectionDeserializer_produces_collection_objects extends TestCase
     {
         $collection = CollectionOfIntegers::with();
 
-        /** @var MockObject|ProvidesInstances $instantiator */
-        $instantiator = $this->createMock(ProvidesInstances::class);
+        /** @var MockObject|Instantiator $instantiator */
+        $instantiator = $this->createMock(Instantiator::class);
         $instantiator
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('instance')
             ->willReturn($collection);
 
-        /** @var MockObject|Hydrates $hydrator */
-        $hydrator = $this->createMock(Hydrates::class);
+        /** @var MockObject|Hydrator $hydrator */
+        $hydrator = $this->createMock(Hydrator::class);
         $hydrator
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('writeTo')
             ->with($collection, [1, 2, 3]);
 
@@ -85,9 +98,9 @@ class CollectionDeserializer_produces_collection_objects extends TestCase
     function throwing_the_right_exceptions()
     {
         $inconstructibleCollection = InconstructibleCollection::class;
-        $deserializer = CollectionDeserializer::forThe($inconstructibleCollection);
+        $deserializer = CollectionDeserializer::forImmutable($inconstructibleCollection);
 
-        $this->expectException(CannotDeserialize::class);
+        $this->expectException(DeserializationFailure::class);
         $this->expectExceptionCode(0);
         $this->expectExceptionMessage(
             'Failed to deserialize the collection: ' .
@@ -102,9 +115,9 @@ class CollectionDeserializer_produces_collection_objects extends TestCase
     function only_accepting_lists_as_input()
     {
         $collectionOfIntegers = CollectionOfIntegers::class;
-        $deserializer = CollectionDeserializer::forThe($collectionOfIntegers);
+        $deserializer = CollectionDeserializer::forImmutable($collectionOfIntegers);
 
-        $this->expectException(CannotDeserialize::class);
+        $this->expectException(DeserializationFailure::class);
         $this->expectExceptionCode(0);
         $this->expectExceptionMessage(
             'Invalid collection deserialization input: ' .
@@ -118,9 +131,9 @@ class CollectionDeserializer_produces_collection_objects extends TestCase
     function only_accepting_iterable_output()
     {
         $popo = Popo::class;
-        $deserializer = CollectionDeserializer::forThe($popo);
+        $deserializer = CollectionDeserializer::forImmutable($popo);
 
-        $this->expectException(CannotDeserialize::class);
+        $this->expectException(DeserializationFailure::class);
         $this->expectExceptionCode(0);
         $this->expectExceptionMessage(
             'Invalid collection deserialization output: ' .
@@ -154,19 +167,41 @@ class CollectionDeserializer_produces_collection_objects extends TestCase
             $sets[$this->tagFor(...$randomIntegers)] = [
                 $randomIntegers,
                 CollectionOfIntegers::with(...$randomIntegers),
-                CollectionOfIntegers::with(...$otherIntegers)
+                CollectionOfIntegers::with(...$otherIntegers),
             ];
         }
         return $sets;
     }
 
-    private function tagFor(int ...$integers): string
+    public function strings(): array
+    {
+        $random = RandomGenerator::create();
+        $sets = [];
+        for ($i = self::TESTS; $i > 0; --$i) {
+            $randomStrings = $this->generateStrings(
+                $random->numberBetween(0, 5),
+                $random
+            );
+            $otherStrings = $this->generateStrings(
+                $random->numberBetween(3, 10),
+                $random
+            );
+            $sets[$this->tagFor(...$randomStrings)] = [
+                $randomStrings,
+                new ArrayObject($randomStrings),
+                new ArrayObject($otherStrings),
+            ];
+        }
+        return $sets;
+    }
+
+    private function tagFor(...$items): string
     {
         return sprintf(
-            '%d number%s: %s',
-            count($integers),
-            count($integers) === 1 ? '' : 's',
-            implode(', ', $integers)
+            '%d item%s: %s',
+            count($items),
+            count($items) === 1 ? '' : 's',
+            implode(', ', $items)
         );
     }
 
@@ -180,5 +215,17 @@ class CollectionDeserializer_produces_collection_objects extends TestCase
             $integers[] = $random->numberBetween(1, 99);
         }
         return $integers;
+    }
+
+    /** @return string[] */
+    private function generateStrings(
+        int $amount,
+        Generator $random
+    ): array {
+        $strings = [];
+        for ($i = $amount; $i > 0; --$i) {
+            $strings[] = $random->text(8);
+        }
+        return $strings;
     }
 }

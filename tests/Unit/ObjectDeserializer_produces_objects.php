@@ -4,21 +4,17 @@ declare(strict_types=1);
 namespace Stratadox\Deserializer\Test\Unit;
 
 use Faker\Factory as RandomGenerator;
+use Stratadox\Deserializer\DeserializationFailure;
+use Stratadox\Hydrator\Hydrator;
+use Stratadox\Instantiator\Instantiator;
 use function json_encode;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Stratadox\Deserializer\CannotDeserialize;
 use Stratadox\Deserializer\ObjectDeserializer;
 use Stratadox\Deserializer\Test\Unit\Fixture\ChildWithoutPropertyAccess;
 use Stratadox\Deserializer\Test\Unit\Fixture\NoMagic;
 use Stratadox\Deserializer\Test\Unit\Fixture\Popo;
-use Stratadox\Hydrator\Hydrates;
-use Stratadox\Instantiator\ProvidesInstances;
 
-/**
- * @covers \Stratadox\Deserializer\ObjectDeserializer
- * @covers \Stratadox\Deserializer\FailedToDeserializeTheObject
- */
 class ObjectDeserializer_produces_objects extends TestCase
 {
     private const TESTS = 10;
@@ -34,7 +30,7 @@ class ObjectDeserializer_produces_objects extends TestCase
         $object = $deserializer->from($properties);
 
         foreach ($properties as $name => $expectedValue) {
-            $this->assertSame($expectedValue, $object->$name);
+            self::assertSame($expectedValue, $object->$name);
         }
     }
 
@@ -46,7 +42,7 @@ class ObjectDeserializer_produces_objects extends TestCase
         /** @var ChildWithoutPropertyAccess $object */
         $object = $deserializer->from(['property' => 'The expected value.']);
 
-        $this->assertSame('The expected value.', $object->property());
+        self::assertSame('The expected value.', $object->property());
     }
 
     /**
@@ -55,7 +51,7 @@ class ObjectDeserializer_produces_objects extends TestCase
      */
     function retrieving_the_class_name(string $class)
     {
-        $this->assertSame(
+        self::assertSame(
             $class,
             ObjectDeserializer::forThe($class)->typeFor([])
         );
@@ -66,17 +62,17 @@ class ObjectDeserializer_produces_objects extends TestCase
     {
         $object = new Popo;
 
-        /** @var MockObject|ProvidesInstances $instantiator */
-        $instantiator = $this->createMock(ProvidesInstances::class);
+        /** @var MockObject|Instantiator $instantiator */
+        $instantiator = $this->createMock(Instantiator::class);
         $instantiator
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('instance')
             ->willReturn($object);
 
-        /** @var MockObject|Hydrates $hydrator */
-        $hydrator = $this->createMock(Hydrates::class);
+        /** @var MockObject|Hydrator $hydrator */
+        $hydrator = $this->createMock(Hydrator::class);
         $hydrator
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('writeTo')
             ->with($object, ['foo' => 'bar']);
 
@@ -90,7 +86,7 @@ class ObjectDeserializer_produces_objects extends TestCase
         $noMagic = NoMagic::class;
         $deserializer = ObjectDeserializer::forThe($noMagic);
 
-        $this->expectException(CannotDeserialize::class);
+        $this->expectException(DeserializationFailure::class);
         $this->expectExceptionCode(0);
         $this->expectExceptionMessage(
             'Failed to deserialize the object: ' .

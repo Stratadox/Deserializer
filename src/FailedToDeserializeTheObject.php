@@ -10,9 +10,8 @@ use Throwable;
  * Notifies the client that the object could not be deserialized.
  *
  * @author Stratadox
- * @license MIT
  */
-final class FailedToDeserializeTheObject extends RuntimeException implements CannotDeserialize
+final class FailedToDeserializeTheObject extends RuntimeException implements DeserializationFailure
 {
     /**
      * Produces a deserialization exception to throw when a "foreign" exception
@@ -21,12 +20,12 @@ final class FailedToDeserializeTheObject extends RuntimeException implements Can
      * Prepends the original exception message with additional information on
      * what happened when the problem occurred.
      *
-     * @param Throwable $exception The original exception that was caught while
-     *                             deserialization the object.
-     * @return CannotDeserialize   The deserialization exception to throw in
-     *                             place of the encountered exception.
+     * @param Throwable $exception    The original exception that was caught
+     *                                while deserialization the object.
+     * @return DeserializationFailure The deserialization exception to throw in
+     *                                place of the encountered exception.
      */
-    public static function encountered(Throwable $exception): CannotDeserialize
+    public static function encountered(Throwable $exception): DeserializationFailure
     {
         return new FailedToDeserializeTheObject(
             'Failed to deserialize the object: ' . $exception->getMessage(),

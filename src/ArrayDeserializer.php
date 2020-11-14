@@ -8,16 +8,15 @@ namespace Stratadox\Deserializer;
  * for collection deserializers.
  *
  * @author Stratadox
- * @license MIT
  */
-final class ArrayDeserializer implements DeserializesCollections
+final class ArrayDeserializer implements Deserializer
 {
     /**
      * Makes a new deserializer for arrays.
      *
-     * @return DeserializesCollections The array deserializer.
+     * @return Deserializer The array deserializer.
      */
-    public static function make(): DeserializesCollections
+    public static function make(): Deserializer
     {
         return new ArrayDeserializer;
     }

@@ -9,9 +9,6 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 use Stratadox\Deserializer\ArrayDeserializer;
 
-/**
- * @covers \Stratadox\Deserializer\ArrayDeserializer
- */
 class ArrayDeserializer_simply_returns_the_input extends TestCase
 {
     /**
@@ -20,7 +17,7 @@ class ArrayDeserializer_simply_returns_the_input extends TestCase
      */
     function retrieving_the_exact_input(array $input)
     {
-        $this->assertSame(
+        self::assertSame(
             $input,
             ArrayDeserializer::make()->from($input)
         );
@@ -32,7 +29,7 @@ class ArrayDeserializer_simply_returns_the_input extends TestCase
      */
     function making_array_type_output(array $input)
     {
-        $this->assertSame(
+        self::assertSame(
             'array',
             ArrayDeserializer::make()->typeFor($input)
         );
@@ -48,16 +45,16 @@ class ArrayDeserializer_simply_returns_the_input extends TestCase
         }
         $thisMany = $random->numberBetween(1, 25);
         return [
-            "List of $thisMany words"                    => [
+            "List of $thisMany words" => [
                 $random->words($thisMany)
             ],
             "Map of $mapAmount times [word => sentence]" => [
                 $map
             ],
-            'List of objects'                            => [
+            'List of objects' => [
                 [new stdClass, $this, new InvalidArgumentException]
             ],
-            'Map of 3 times [tag => object]'             => [
+            'Map of 3 times [tag => object]' => [
                 [
                     'stdClass'  => new stdClass,
                     'this'      => $this,

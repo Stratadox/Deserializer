@@ -6,14 +6,10 @@ namespace Stratadox\Deserializer\Test\Unit\Condition;
 use function array_combine;
 use function array_map;
 use Faker\Factory as RandomGenerator;
-use Faker\Generator;
 use PHPUnit\Framework\TestCase;
 use function range;
 use Stratadox\Deserializer\Condition\AreOfList;
 
-/**
- * @covers \Stratadox\Deserializer\Condition\AreOfList
- */
 class AreOfList_type_checks_that_the_keys_are_sequential_numbers extends TestCase
 {
     /**
@@ -22,7 +18,7 @@ class AreOfList_type_checks_that_the_keys_are_sequential_numbers extends TestCas
      */
     function check_that_the_right_value_gets_accepted(array $input)
     {
-        $this->assertTrue(AreOfList::type()->isSatisfiedBy($input));
+        self::assertTrue(AreOfList::type()->isSatisfiedBy($input));
     }
 
     /**
@@ -31,7 +27,7 @@ class AreOfList_type_checks_that_the_keys_are_sequential_numbers extends TestCas
      */
     function check_that_the_wrong_value_gets_denied(array $input)
     {
-        $this->assertFalse(AreOfList::type()->isSatisfiedBy($input));
+        self::assertFalse(AreOfList::type()->isSatisfiedBy($input));
     }
 
     public function acceptedData(): array

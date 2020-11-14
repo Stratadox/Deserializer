@@ -9,14 +9,18 @@ use Stratadox\Specification\Specifying;
 /**
  * Condition that accepts data with a specific discriminator key and value.
  *
+ * Particularly useful when deserializing relational data into polymorphic
+ * object structures.
+ *
  * @author Stratadox
- * @license MIT
  */
 final class HaveTheDiscriminatorValue implements Specifies
 {
     use Specifying;
 
+    /** @var string */
     private $key;
+    /** @var string */
     private $value;
 
     private function __construct(string $key, string $value)

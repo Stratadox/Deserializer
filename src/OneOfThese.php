@@ -10,11 +10,10 @@ use Stratadox\ImmutableCollection\ImmutableCollection;
  * into objects.
  *
  * @author Stratadox
- * @license MIT
  */
-final class OneOfThese extends ImmutableCollection implements Deserializes
+final class OneOfThese extends ImmutableCollection implements Deserializer
 {
-    private function __construct(Option ...$options)
+    private function __construct(DeserializationOption ...$options)
     {
         parent::__construct(...$options);
     }
@@ -22,18 +21,18 @@ final class OneOfThese extends ImmutableCollection implements Deserializes
     /**
      * Makes a new collection of deserialization options.
      *
-     * @param Option ...$options The options to consider when deserializing an
-     *                           input array.
-     * @return Deserializes      The deserialization options container.
+     * @param DeserializationOption ...$options The options to consider when
+     *                                          deserializing an input array.
+     * @return Deserializer                     The deserialization options.
      */
-    public static function deserializers(Option ...$options): Deserializes
+    public static function deserializers(DeserializationOption ...$options): Deserializer
     {
         return new OneOfThese(...$options);
     }
 
 
     /** @inheritdoc */
-    public function current(): Option
+    public function current(): DeserializationOption
     {
         return parent::current();
     }
@@ -50,21 +49,23 @@ final class OneOfThese extends ImmutableCollection implements Deserializes
         return $this->wouldProduceFor($input, $this->optionFor($input));
     }
 
-
-    /** @throws CannotDeserialize */
-    private function makeFrom(array $input, Option $deserialize)
+    /**
+     * @throws DeserializationFailure
+     * @return mixed
+     */
+    private function makeFrom(array $input, DeserializationOption $deserialize)
     {
         return $deserialize->from($input);
     }
 
-    /** @throws CannotDeserialize */
-    private function wouldProduceFor(array $input, Option $deserialize): string
+    /** @throws DeserializationFailure */
+    private function wouldProduceFor(array $input, DeserializationOption $deserialize): string
     {
         return $deserialize->typeFor($input);
     }
 
-    /** @throws CannotDeserialize */
-    private function optionFor(array $input): Option
+    /** @throws DeserializationFailure */
+    private function optionFor(array $input): DeserializationOption
     {
         foreach ($this as $option) {
             if ($option->isSatisfiedBy($input)) {

@@ -3,44 +3,61 @@ declare(strict_types=1);
 
 namespace Stratadox\Deserializer;
 
-use function is_iterable as itIsAnIterable;
-use function is_string as itIsNotANumeric;
-use Stratadox\Hydrator\CannotHydrate;
-use Stratadox\Hydrator\CollectionHydrator;
-use Stratadox\Hydrator\Hydrates;
-use Stratadox\Instantiator\CannotInstantiateThis;
+use Stratadox\Hydrator\ImmutableCollectionHydrator;
+use Stratadox\Hydrator\MutableCollectionHydrator;
+use function is_iterable;
+use function is_string;
+use Stratadox\Hydrator\HydrationFailure;
+use Stratadox\Hydrator\Hydrator;
+use Stratadox\Instantiator\InstantiationFailure;
 use Stratadox\Instantiator\Instantiator;
-use Stratadox\Instantiator\ProvidesInstances;
+use Stratadox\Instantiator\ObjectInstantiator;
 
 /**
  * Deserializes the input array into collection objects.
  *
  * @author Stratadox
- * @license MIT
  */
-final class CollectionDeserializer implements DeserializesCollections
+final class CollectionDeserializer implements Deserializer
 {
+    /** @var Instantiator */
     private $make;
+    /** @var Hydrator */
     private $hydrator;
 
-    private function __construct(ProvidesInstances $instance, Hydrates $hydrate)
+    private function __construct(Instantiator $instance, Hydrator $hydrate)
     {
         $this->make = $instance;
         $this->hydrator = $hydrate;
     }
 
     /**
-     * Makes a new deserializer for the collection class.
+     * Makes a new deserializer for an immutable collection class.
      *
-     * @param string $class            The fully qualified collection class name.
-     * @return DeserializesCollections The collection deserializer.
-     * @throws CannotInstantiateThis   When the class cannot be instantiated.
+     * @param string $class The fully qualified collection class name.
+     * @return Deserializer The collection deserializer.
+     * @throws InstantiationFailure
      */
-    public static function forThe(string $class): DeserializesCollections
+    public static function forImmutable(string $class): Deserializer
     {
         return new CollectionDeserializer(
-            Instantiator::forThe($class),
-            CollectionHydrator::default()
+            ObjectInstantiator::forThe($class),
+            ImmutableCollectionHydrator::default()
+        );
+    }
+
+    /**
+     * Makes a new deserializer for a mutable collection class.
+     *
+     * @param string $class The fully qualified collection class name.
+     * @return Deserializer The collection deserializer.
+     * @throws InstantiationFailure
+     */
+    public static function forMutable(string $class): Deserializer
+    {
+        return new CollectionDeserializer(
+            ObjectInstantiator::forThe($class),
+            MutableCollectionHydrator::default()
         );
     }
 
@@ -48,14 +65,14 @@ final class CollectionDeserializer implements DeserializesCollections
      * Makes a new deserializer for the collection class, using custom
      * instantiator and hydrator.
      *
-     * @param ProvidesInstances $instantiator The object that produces instances.
-     * @param Hydrates          $hydrator     The object that writes properties.
-     * @return DeserializesCollections        The collection deserializer.
+     * @param Instantiator $instantiator The object that produces instances.
+     * @param Hydrator     $hydrator     The object that writes properties.
+     * @return Deserializer              The collection deserializer.
      */
     public static function using(
-        ProvidesInstances $instantiator,
-        Hydrates $hydrator
-    ): DeserializesCollections {
+        Instantiator $instantiator,
+        Hydrator $hydrator
+    ): Deserializer {
         return new CollectionDeserializer($instantiator, $hydrator);
     }
 
@@ -66,10 +83,10 @@ final class CollectionDeserializer implements DeserializesCollections
         $this->mustBeValid($collection, $input);
         try {
             $this->hydrator->writeTo($collection, $input);
-        } catch (CannotHydrate $exception) {
+        } catch (HydrationFailure $exception) {
             throw FailedToDeserializeTheCollection::encountered($exception);
         }
-        if (itIsAnIterable($collection)) {
+        if (is_iterable($collection)) {
             /** @var iterable $collection */
             return $collection;
         }
@@ -82,12 +99,12 @@ final class CollectionDeserializer implements DeserializesCollections
         return $this->make->class();
     }
 
-    /** @throws CannotDeserialize */
+    /** @throws DeserializationFailure */
     private function mustBeValid(object $collection, array $input): void
     {
         foreach ($input as $key => $value) {
-            if (itIsNotANumeric($key)) {
-                throw IllegalInputKey::illegal($collection, $key);
+            if (is_string($key)) {
+                throw IllegalInputKey::illegal($collection, $key, $input);
             }
         }
     }

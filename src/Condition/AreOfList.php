@@ -11,8 +11,12 @@ use Stratadox\Specification\Specifying;
 /**
  * Condition that accepts list typed input.
  *
+ * Can be used to conditionally act upon list input. An example could be when
+ * deserializing a json segment that contains either an element x or a list of
+ * elements x. This specification can be used to make the deserializer aware
+ * of the possibility of a list input and make it act accordingly.
+ *
  * @author Stratadox
- * @license MIT
  */
 final class AreOfList implements Specifies
 {
@@ -25,7 +29,7 @@ final class AreOfList implements Specifies
      */
     public static function type(): Specifies
     {
-        return new self;
+        return new self();
     }
 
     /** @inheritdoc */

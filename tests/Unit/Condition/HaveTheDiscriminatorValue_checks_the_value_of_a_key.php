@@ -7,9 +7,6 @@ use Faker\Factory as RandomGenerator;
 use PHPUnit\Framework\TestCase;
 use Stratadox\Deserializer\Condition\HaveTheDiscriminatorValue;
 
-/**
- * @covers \Stratadox\Deserializer\Condition\HaveTheDiscriminatorValue
- */
 class HaveTheDiscriminatorValue_checks_the_value_of_a_key extends TestCase
 {
     /**
@@ -22,7 +19,7 @@ class HaveTheDiscriminatorValue_checks_the_value_of_a_key extends TestCase
         array $input
     ) {
         $constraint = HaveTheDiscriminatorValue::of($key, $value);
-        $this->assertTrue($constraint->isSatisfiedBy($input));
+        self::assertTrue($constraint->isSatisfiedBy($input));
     }
 
     /**
@@ -35,7 +32,7 @@ class HaveTheDiscriminatorValue_checks_the_value_of_a_key extends TestCase
         array $input
     ) {
         $constraint = HaveTheDiscriminatorValue::of($key, $value);
-        $this->assertFalse($constraint->isSatisfiedBy($input));
+        self::assertFalse($constraint->isSatisfiedBy($input));
     }
 
     public function acceptedData(): array
@@ -48,7 +45,12 @@ class HaveTheDiscriminatorValue_checks_the_value_of_a_key extends TestCase
                 $key,
                 $value,
                 [$key => $value],
-            ]
+            ],
+            'Column n with 1' => [
+                'n',
+                '1',
+                ['n' => 1],
+            ],
         ];
     }
 
@@ -63,7 +65,12 @@ class HaveTheDiscriminatorValue_checks_the_value_of_a_key extends TestCase
                 $key,
                 $expected,
                 [$key => $actual],
-            ]
+            ],
+            'Column n expecting 4 but getting 3' => [
+                'n',
+                '4',
+                ['n' => 3],
+            ],
         ];
     }
 }

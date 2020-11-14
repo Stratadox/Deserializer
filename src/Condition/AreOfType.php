@@ -10,13 +10,17 @@ use Stratadox\Specification\Specifying;
 /**
  * Condition that accepts a specific input type.
  *
+ * Can be used to have the deserializer act differently upon receiving a
+ * particular type of data. Generally combined with @see ConsistOfItems in order
+ * to check for the data types of all items in a list.
+ *
  * @author Stratadox
- * @license MIT
  */
 final class AreOfType implements Specifies
 {
     use Specifying;
 
+    /** @var string */
     private $expectation;
 
     private function __construct(string $expectation)
@@ -31,7 +35,7 @@ final class AreOfType implements Specifies
      */
     public static function boolean(): Specifies
     {
-        return new AreOfType('boolean');
+        return new self('boolean');
     }
 
     /**
@@ -41,7 +45,7 @@ final class AreOfType implements Specifies
      */
     public static function integer(): Specifies
     {
-        return new AreOfType('integer');
+        return new self('integer');
     }
 
     /**
@@ -51,7 +55,7 @@ final class AreOfType implements Specifies
      */
     public static function string(): Specifies
     {
-        return new AreOfType('string');
+        return new self('string');
     }
 
     /** @inheritdoc */

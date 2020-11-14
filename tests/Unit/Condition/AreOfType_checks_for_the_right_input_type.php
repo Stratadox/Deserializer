@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace Stratadox\Deserializer\Test\Unit\Condition;
 
-use function array_combine as combine;
-use function array_map as map;
-use function array_merge as merge;
+use function array_combine;
+use function array_map;
+use function array_merge;
 use Faker\Factory as RandomGenerator;
-use const PHP_INT_MAX as ABSOLUTE_MAXIMUM;
-use const PHP_INT_MIN as ABSOLUTE_MINIMUM;
+use const PHP_INT_MAX;
+use const PHP_INT_MIN;
 use PHPUnit\Framework\TestCase;
 use Stratadox\Deserializer\Condition\AreOfType;
 
@@ -23,7 +23,7 @@ class AreOfType_checks_for_the_right_input_type extends TestCase
      */
     function accepting_boolean_types($input)
     {
-        $this->assertTrue(
+        self::assertTrue(
             AreOfType::boolean()->isSatisfiedBy($input)
         );
     }
@@ -34,7 +34,7 @@ class AreOfType_checks_for_the_right_input_type extends TestCase
      */
     function denying_non_boolean_types($input)
     {
-        $this->assertFalse(
+        self::assertFalse(
             AreOfType::boolean()->isSatisfiedBy($input)
         );
     }
@@ -45,7 +45,7 @@ class AreOfType_checks_for_the_right_input_type extends TestCase
      */
     function accepting_integer_types($input)
     {
-        $this->assertTrue(
+        self::assertTrue(
             AreOfType::integer()->isSatisfiedBy($input)
         );
     }
@@ -56,7 +56,7 @@ class AreOfType_checks_for_the_right_input_type extends TestCase
      */
     function denying_non_integer_types($input)
     {
-        $this->assertFalse(
+        self::assertFalse(
             AreOfType::integer()->isSatisfiedBy($input)
         );
     }
@@ -67,7 +67,7 @@ class AreOfType_checks_for_the_right_input_type extends TestCase
      */
     function accepting_string_types($input)
     {
-        $this->assertTrue(
+        self::assertTrue(
             AreOfType::string()->isSatisfiedBy($input)
         );
     }
@@ -78,7 +78,7 @@ class AreOfType_checks_for_the_right_input_type extends TestCase
      */
     function denying_non_string_types($input)
     {
-        $this->assertFalse(
+        self::assertFalse(
             AreOfType::string()->isSatisfiedBy($input)
         );
     }
@@ -93,7 +93,7 @@ class AreOfType_checks_for_the_right_input_type extends TestCase
 
     public function nonBooleanTypes(): array
     {
-        return merge(
+        return array_merge(
             $this->integerTypes(),
             $this->stringTypes()
         );
@@ -102,11 +102,11 @@ class AreOfType_checks_for_the_right_input_type extends TestCase
     public function integerTypes(): array
     {
         $random = RandomGenerator::create();
-        $smallNumber = $random->numberBetween(ABSOLUTE_MINIMUM, ABSOLUTE_MINIMUM + 100);
+        $smallNumber = $random->numberBetween(PHP_INT_MIN, PHP_INT_MIN + 100);
         $negativeNumber = $random->numberBetween(-100, -1);
         $number = $random->numberBetween(-9, 9);
         $positiveNumber = $random->numberBetween(1, 100);
-        $bigNumber = $random->numberBetween(ABSOLUTE_MAXIMUM - 100, ABSOLUTE_MAXIMUM);
+        $bigNumber = $random->numberBetween(PHP_INT_MAX - 100, PHP_INT_MAX);
         return [
             "Very small integer `$smallNumber`" => [$smallNumber],
             "Negative integer `$negativeNumber`" => [$negativeNumber],
@@ -118,7 +118,7 @@ class AreOfType_checks_for_the_right_input_type extends TestCase
 
     public function nonIntegerTypes(): array
     {
-        return merge(
+        return array_merge(
             $this->booleanTypes(),
             $this->stringTypes()
         );
@@ -127,15 +127,15 @@ class AreOfType_checks_for_the_right_input_type extends TestCase
     public function stringTypes(): array
     {
         $random = RandomGenerator::create();
-        $strings = merge(
+        $strings = array_merge(
             $random->words(3),
             $random->sentences(3)
         );
-        return combine(
-            map(function(string $s): string {
+        return array_combine(
+            array_map(static function(string $s): string {
                 return "String '$s'";
             }, $strings),
-            map(function(string $s): array {
+            array_map(static function(string $s): array {
                 return [$s];
             }, $strings)
         );
@@ -143,7 +143,7 @@ class AreOfType_checks_for_the_right_input_type extends TestCase
 
     public function nonStringTypes(): array
     {
-        return merge(
+        return array_merge(
             $this->booleanTypes(),
             $this->integerTypes()
         );

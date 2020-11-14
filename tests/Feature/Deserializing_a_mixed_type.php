@@ -9,7 +9,7 @@ use Stratadox\Deserializer\CollectionDeserializer;
 use Stratadox\Deserializer\Condition\AreOfType;
 use Stratadox\Deserializer\Condition\ConsistOfItems;
 use Stratadox\Deserializer\Condition\DidNotGetAccepted;
-use Stratadox\Deserializer\Deserializes;
+use Stratadox\Deserializer\Deserializer;
 use Stratadox\Deserializer\Test\Feature\Fixture\ListOfIntegers;
 use Stratadox\Deserializer\Condition\HaveTheDiscriminatorValue;
 use Stratadox\Deserializer\ForDataSets;
@@ -25,7 +25,7 @@ use Stratadox\Deserializer\Test\Feature\Fixture\ListOfStrings;
  */
 class Deserializing_a_mixed_type extends TestCase
 {
-    /** @var Deserializes */
+    /** @var Deserializer */
     private $make;
 
     protected function setUp(): void
@@ -44,12 +44,12 @@ class Deserializing_a_mixed_type extends TestCase
 
             ForDataSets::that(
                 AreOfList::type()->and(ConsistOfItems::that(AreOfType::integer())),
-                CollectionDeserializer::forThe(ListOfIntegers::class)
+                CollectionDeserializer::forImmutable(ListOfIntegers::class)
             ),
 
             ForDataSets::that(
                 AreOfList::type()->and(ConsistOfItems::that(AreOfType::string())),
-                CollectionDeserializer::forThe(ListOfStrings::class)
+                CollectionDeserializer::forImmutable(ListOfStrings::class)
             ),
 
             ForDataSets::that(
@@ -66,7 +66,7 @@ class Deserializing_a_mixed_type extends TestCase
      */
     function deserializing_the(array $input, $expectation)
     {
-        $this->assertEquals(
+        self::assertEquals(
             $expectation,
             $this->make->from($input)
         );
