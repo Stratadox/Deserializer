@@ -18,19 +18,19 @@
         }
     },
     "require": {
-        "php": ">=7.2",
+        "php": ">=8.0",
         "ext-json": "*",
         "stratadox/deserializer-contracts": "^0.3",
         "stratadox/hydrator": "^6.0.1",
         "stratadox/instantiator": "^0.2",
         "stratadox/specification": "^1.0",
-        "stratadox/immutable-collection": "^1.1"
+        "stratadox/immutable-collection": "^2"
     },
     "require-dev": {
         "roave/security-advisories": "dev-master",
         "phpunit/phpunit": "^8.2",
         "php-coveralls/php-coveralls": "^2.0",
         "phpstan/phpstan": "^0.12.54",
-        "fzaninotto/faker": "^1.7"
+        "fakerphp/faker": "^1.7"
     }
 }

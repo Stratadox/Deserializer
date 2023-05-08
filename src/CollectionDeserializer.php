@@ -20,16 +20,10 @@ use Stratadox\Instantiator\ObjectInstantiator;
  */
 final class CollectionDeserializer implements Deserializer
 {
-    /** @var Instantiator */
-    private $make;
-    /** @var Hydrator */
-    private $hydrator;
-
-    private function __construct(Instantiator $instance, Hydrator $hydrate)
-    {
-        $this->make = $instance;
-        $this->hydrator = $hydrate;
-    }
+    private function __construct(
+        private Instantiator $make,
+        private Hydrator $hydrator
+    ) {}
 
     /**
      * Makes a new deserializer for an immutable collection class.

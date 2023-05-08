@@ -15,16 +15,10 @@ use Stratadox\Specification\Contract\Satisfiable;
  */
 final class ForDataSets implements DeserializationOption
 {
-    /** @var Satisfiable */
-    private $condition;
-    /** @var Deserializer */
-    private $deserialize;
-
-    private function __construct(Satisfiable $condition, Deserializer $deserialize)
-    {
-        $this->condition = $condition;
-        $this->deserialize = $deserialize;
-    }
+    private function __construct(
+        private Satisfiable $condition,
+        private Deserializer $deserialize
+    ) {}
 
     /**
      * Produce an option for data sets that pass the condition.
